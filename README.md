@@ -123,13 +123,7 @@ Supply-Chain-Inventory-and-Operations-Optimization
 *B.Tech Mechanical Engineering, Indian Institute of Technology Hyderabad (IIT Hyderabad)*  
 **Skills:** Python | SQL (PostgreSQL) | Power BI | Excel | Supply Chain & Operations Analytics
 
-Attribution & Open-Source Compliance:
-Base Dataset & Power BI Dashboard Architecture: Adapted from open-source repository Supply-Chain-Analytics-Dashboard (originally authored by Pritam Patil).
 
-Independent Analytical Extensions Developed by Author:
-
-ABC-XYZ Revenue Segmentation & Differentiated Service-Level Safety Stock / Reorder Point (
-ROP) Model implemented in Python.
 
 Supplier Quality & Inspection Failure Rate Benchmarking Queries implemented in PostgreSQL.
 
