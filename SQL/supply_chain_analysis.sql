@@ -193,9 +193,42 @@ FROM supply_chain
 WHERE Stock_levels < ((Number_of_products_sold / 30.0) * Lead_times)
 ORDER BY Revenue_generated DESC;
 
+-- 1. Working Capital Tied Up by Product Category (Dollar Value)
+SELECT Product_type,
+       ROUND(SUM(Stock_levels * Manufacturing_costs), 2) AS total_working_capital_usd,
+       ROUND(SUM(Revenue_generated), 2) AS total_revenue_usd
+FROM supply_chain
+GROUP BY Product_type
+ORDER BY total_working_capital_usd DESC;
 
+-- 2. Supplier Quality & Warranty Cost Exposure (Using CTE)
+WITH SupplierMetrics AS (
+    SELECT Supplier_name,
+           COUNT(SKU) AS total_skus,
+           AVG(Defect_rates) AS avg_defect_rate,
+           -- Estimated Warranty Cost = Defect Rate * Units Sold * Mfg Cost
+           SUM((Defect_rates / 100.0) * Number_of_products_sold * Manufacturing_costs) AS total_warranty_cost
+    FROM supply_chain
+    GROUP BY Supplier_name
+)
+SELECT Supplier_name,
+       total_skus,
+       ROUND(avg_defect_rate, 2) AS avg_defect_rate_pct,
+       ROUND(total_warranty_cost, 2) AS estimated_warranty_loss_usd
+FROM SupplierMetrics
+ORDER BY total_warranty_cost DESC;
 
-
+-- 3. SKUs at High Stockout Risk (Stock Below Lead-Time Demand Buffer)
+SELECT SKU,
+       Product_type,
+       Supplier_name,
+       Stock_levels,
+       Lead_times,
+       ROUND((Number_of_products_sold / 365.0) * Lead_times, 0) AS lead_time_demand_units,
+       Revenue_generated
+FROM supply_chain
+WHERE Stock_levels < ((Number_of_products_sold / 365.0) * Lead_times)
+ORDER BY Revenue_generated DESC;
 
 
 
